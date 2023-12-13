@@ -2,7 +2,7 @@ import ReceiptModel from '../database/model/receiptModel';
 import { IReceipt } from '../types/receipt';
 import { GraphQLError } from 'graphql';
 
-export default class ReceiptController {
+export default class Receipt {
   static async getAllReceipts(): Promise<IReceipt[]> {
     try {
       const receipts = await ReceiptModel.findAll();
@@ -57,5 +57,35 @@ export default class ReceiptController {
     }
   }
 
-  
+  static async updateReceipt(
+    id: string | undefined,
+    receiptData: IReceipt
+  ): Promise<IReceipt> {
+    try {
+      if (!id) throw new GraphQLError('Receipt id is undefined', {
+        extensions: { code: 'BAD_USER_INPUT', argumentName: 'id' },
+      });
+      if (!receiptData) throw new GraphQLError('Receipt data is undefined', {
+        extensions: { code: 'BAD_USER_INPUT', argumentName: 'receiptData' },
+      });
+
+      const [updatedCount, updatedReceipt] = await ReceiptModel.update(
+        receiptData,
+        {
+          where: { id },
+          returning: true,
+        }
+      );
+
+      if (updatedCount === 0 || !updatedReceipt[0]) {
+        throw new Error('Receipt not found');
+      }
+
+      return updatedReceipt[0];
+    } catch (error: any) {
+      throw new GraphQLError(error.message, {
+        extensions: { code: error.extensions.code },
+      });
+    }
+  }
 }

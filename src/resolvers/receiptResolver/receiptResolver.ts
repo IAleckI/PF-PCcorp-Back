@@ -11,8 +11,7 @@ const receiptResolver = {
   Mutation: {
     createReceipt: async (_parent: any, args: { input: IReceipt }) =>
       await ReceiptController.createReceipt(args.input),
-    updateReceipt: async (_parent: any, args: { id: string; input: IReceipt }) =>
-      await ReceiptController.updateReceipt(args.id, args.input),
+   
     deleteReceipt: async (_parent: any, args: { id: string }) =>
       await ReceiptController.deleteReceipt(args.id),
   },

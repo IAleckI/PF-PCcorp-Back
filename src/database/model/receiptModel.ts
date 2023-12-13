@@ -1,0 +1,21 @@
+import sequelize from "../db";
+import { DataTypes  } from "sequelize";
+import { IReceipt } from "../../types/receipt";
+
+const ReceiptModel = sequelize.define<IReceipt>("receipt", {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
+  userId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  productId: {
+    type: DataTypes.UUID,
+    allowNull: false
+  }
+});
+
+export default ReceiptModel;
