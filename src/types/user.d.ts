@@ -1,6 +1,5 @@
 import { Model } from "sequelize";
 import ProductModel from "../database/model/productModel";
-import ProductModel from "../database/model/productModel";
 import { 
   BelongsToManyAddAssociationMixin, 
   BelongsToManyGetAssociationsMixin, 
