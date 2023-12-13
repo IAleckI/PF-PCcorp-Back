@@ -1,0 +1,21 @@
+import {gql} from "graphql-tag";
+
+const userSchema = gql`
+type User {
+    id: ID!
+    userName: String!
+    email: String!
+    passwordHash: String!
+    verify: Boolean
+}
+extend type query {
+    getAllUser: [User]
+    getUserById(id: ID!): User
+    getUserLogin(email: String!, passwordHash: String!): User
+}
+extend type mutation {
+    createUser(userName: String!, email: String!, passwordHash: String!): User
+    updateUser(id: ID!, userName: String!, email: String!, passwordHash: String!): User
+    deleteUser(id: ID!): User
+}
+`;

@@ -18,5 +18,3 @@ export interface IUserModel extends Model{
     getCart: BelongsToManyGetAssociationsMixin<ProductModel>;
     removeCart: BelongsToManyRemoveAssociationMixin<ProductModel, "products">;
 }
-
-export interface IUserModel extends Model<IUser>, IUser {}
