@@ -6,7 +6,7 @@ import "./src/database/associations/associations";
 
 (async function main() {
   try {
-    await sequelize.sync({ force: true});
+    await sequelize.sync({ force: false });
     console.log("Connection has been established successfully.");
     await Server(RootDefs, RootResolver);
   } catch (error: any) {
