@@ -22,3 +22,4 @@ export async function sendVerifyMail(adress: string, name: string, token: string
     html: mailTemplate(name, token)
   });
 }
+export default sendVerifyMail;

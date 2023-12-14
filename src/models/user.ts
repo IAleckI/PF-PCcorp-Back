@@ -1,8 +1,11 @@
 import { IUserModel} from "../types/user";
 import UserModel from "../database/model/userModel";
 import bcrypt from "bcrypt";
-// import Jwt from "jsonwebtoken";
+import Jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import sendVerifyMail from "../services/mail/mail.services";
 import { GraphQLError } from "graphql";
+dotenv.config();
 
 export default class User {
     static async getAllUsers(): Promise<IUserModel[]> {
@@ -36,7 +39,10 @@ export default class User {
             passwordHash,
             verify: false
         });
-
+        const token = Jwt.sign({ email: newUser.email }, process.env.SECRET as string, {
+            expiresIn: "1h",
+          });
+        await sendVerifyMail(newUser.email, newUser.userName, token);
         return newUser;
     }
 
@@ -86,5 +92,28 @@ export default class User {
         }
         return user;
     }
+
+    static async verify (token: string): Promise<IUserModel> {
+
+        try{
+            const user = Jwt.verify(token, process.env.SECRET as string) as IUserModel;
+    
+            if (!user) throw new Error('Invalid token');
+            const userFind = await UserModel.findOne({ where: { email: user.email } });
+        
+            if (!userFind) throw new Error('Invalid token');
+        
+            userFind?.set({ verify: true });
+            await userFind?.save();
+        
+            return userFind;
+        }
+        catch (error:any) {
+            throw new GraphQLError(error.message, {
+                extensions: { code: error.extensions.code }
+            });
+        }
+       
+      }
 
 }
