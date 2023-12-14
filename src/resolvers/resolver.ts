@@ -1,5 +1,6 @@
 import { UserProductsResolver } from "./userProductResolver/userProductResolver";
 import { ProductResolver } from "./productResolver/ProductResolver";
+import userResolver from "./userResolver/userResolver";
 
 const Resolvers = {
   Query: {
@@ -10,4 +11,4 @@ const Resolvers = {
   }
 };
 
-export const RootResolver = [Resolvers, ProductResolver, UserProductsResolver];
+export const RootResolver = [Resolvers, ProductResolver, UserProductsResolver, userResolver];
