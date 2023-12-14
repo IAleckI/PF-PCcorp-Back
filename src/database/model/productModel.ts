@@ -16,6 +16,10 @@ const ProductModel = sequelize.define<IProducts>("products", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  image:{
+    type: DataTypes.STRING,
+    allowNull:false,
+  },
   family: {
     type: DataTypes.STRING,
   },
