@@ -29,8 +29,7 @@ export default class User {
             throw new GraphQLError('User already exists', {
                 extensions: { code: 'BAD_USER_INPUT' }
             });
-        }
-
+        }        
         const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(user.passwordHash, salt);
         const newUser = await UserModel.create({
@@ -44,6 +43,7 @@ export default class User {
           });
         await sendVerifyMail(newUser.email, newUser.userName, token);
         return newUser;
+        
     }
 
     static async update(id: string, user: IUserModel): Promise<IUserModel> {

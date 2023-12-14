@@ -14,9 +14,7 @@ export default class UserController {
             }
             return users;
         } catch (error:any) {
-            throw new GraphQLError(error.message, {
-                extensions: { code:error.extension.code }
-            });
+            throw new GraphQLError(error.message);
         }
     }
 
@@ -38,17 +36,20 @@ export default class UserController {
 
     static async createUser (user: IUserModel): Promise<IUserModel> {
         try {
+            console.log(user);
+            
           if (!user.userName || !user.email || !user.passwordHash) {
             throw new GraphQLError('User name, email and password are required', {
               extensions: { code: 'BAD_USER_INPUT' }
             });
+
           }
+          console.log("pasa por el if");
+          
           const newUser = await User.create(user);
           return newUser;
         } catch (error: any) {
-          throw new GraphQLError(error.message, {
-            extensions: { code: error.extensions.code }
-          });
+          throw new GraphQLError(error.message);
         }
       }
 
@@ -102,6 +103,23 @@ export default class UserController {
                 });
             }
             return user;
+        } catch (error:any) {
+            throw new GraphQLError(error.message, {
+                extensions: { code: error.extensions.code }
+            });
+        }
+    }
+
+    static async verifyUser(token:string):Promise<IUserModel>{
+        try {
+            if (token === undefined) throw new GraphQLError('User id is undefined', {
+                extensions: { code: 'BAD_USER_INPUT', argumentName: 'id' }
+            });
+            const userVerified = await User.verify(token);
+            if (userVerified === null) throw new GraphQLError('User not found', {
+                extensions: { code: 'BAD_USER_INPUT' }
+            });
+            return userVerified;
         } catch (error:any) {
             throw new GraphQLError(error.message, {
                 extensions: { code: error.extensions.code }

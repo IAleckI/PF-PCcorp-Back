@@ -10,12 +10,14 @@ const userResolver = {
       await UserController.login(args.email, args.passwordHash)
   },
   Mutation: {
-    userCreate: async (_root: any, args: IUserModel): Promise<IUserModel> => 
+    createUser: async (_root: any, args: IUserModel): Promise<IUserModel> => 
       await UserController.createUser(args),
-    userUpdate: async (_root: any, args: { id: string, data: IUserModel }): Promise<IUserModel | null> =>
+    updateUser: async (_root: any, args: { id: string, data: IUserModel }): Promise<IUserModel | null> =>
       await UserController.updateUser(args.id, args.data), 
-    userDelete: async (_root: any, args: { id: string }): Promise<IUserModel> =>
-      await UserController.deleteUser(args.id)
+    deleteUser: async (_root: any, args: { id: string }): Promise<IUserModel> =>
+      await UserController.deleteUser(args.id),
+    userVeryfy: async (_root: any, args: { token: string }): Promise<IUserModel> =>
+      await UserController.verifyUser(args.token)
   }
 };
 
