@@ -14,9 +14,7 @@ export default class UserController {
       }
       return users;
     } catch (error:any) {
-      throw new GraphQLError(error.message, {
-        extensions: { code: error.extensions.code }
-      });
+      throw new GraphQLError(error.message);
     }
   }
 
@@ -30,9 +28,7 @@ export default class UserController {
       }
       return user;
     } catch (error:any) {
-      throw new GraphQLError("User not found", {
-        extensions: { code:error.extension.code }
-      });
+      throw new GraphQLError("User not found");
     }
   }
 
@@ -48,9 +44,7 @@ export default class UserController {
       const newUser = await User.create(user);
       return newUser;
     } catch (error: any) {
-      throw new GraphQLError(error.message, {
-        extensions: { code: error.extensions.code }
-      });
+      throw new GraphQLError(error.message);
     }
   }
 
@@ -66,9 +60,7 @@ export default class UserController {
       });
       return user;
     } catch (error: any) {
-      throw new GraphQLError(error.message, {
-        extensions: { code: error.extensions.code }
-      });
+      throw new GraphQLError(error.message);
     }
   }
 
@@ -84,9 +76,7 @@ export default class UserController {
       return userUpdated;
 
     } catch (error:any) {
-      throw new GraphQLError(error.message, {
-        extensions: { code: error.extensions.code }
-      });
+      throw new GraphQLError(error.message);
     }
   }
 
@@ -105,9 +95,7 @@ export default class UserController {
       }
       return user;
     } catch (error:any) {
-      throw new GraphQLError(error.message, {
-        extensions: { code: error.extensions.code }
-      });
+      throw new GraphQLError(error.message);
     }
   }
 
@@ -122,9 +110,7 @@ export default class UserController {
       });
       return userVerified;
     } catch (error:any) {
-      throw new GraphQLError(error.message, {
-        extensions: { code: error.extensions.code }
-      });
+      throw new GraphQLError(error.message);
     }
   }
 
