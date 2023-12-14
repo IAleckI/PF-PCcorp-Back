@@ -1,5 +1,5 @@
-import UserController from '../../controllers/userController';
-import { IUserModel } from '../../types/user';
+import UserController from "../../controllers/userController";
+import { IUserModel } from "../../types/user";
 
 const userResolver = {
   Query: {

@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendVerifyMail(adress: string, name: string, token: string) {
-  transporter.sendMail({
+  await transporter.sendMail({
     from: "PCorp",
     to: adress,
     subject: "Verify your email",
