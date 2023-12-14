@@ -1,14 +1,27 @@
 import { GraphQLError } from 'graphql';
 import { IUpload } from '../types/upload';
 import UploadModel from '../database/model/uploadModel';
+import express from 'express';
+import fileUpload from 'express-fileupload';
 
 export default class UploadController {
-  static async createUpload(url: string): Promise<IUpload> {
+  static async createUpload(req: express.Request): Promise<IUpload> {
     try {
-      const createdUpload = await UploadModel.create({ url });
+      if (!req.files || Object.keys(req.files).length === 0) {
+        throw new GraphQLError('No files were uploaded.');
+      }
+
+      const uploadedFile = req.files.file as fileUpload.UploadedFile;
+      const { name, mv } = uploadedFile;
+
+      // Move the file to a directory or process it as needed
+      const filePath = `/path/to/uploads/${name}`;
+      mv(filePath);
+
+      const createdUpload = await UploadModel.create({ url: filePath });
       return createdUpload;
     } catch (error: any) {
-      throw new GraphQLError(error);
+      throw new GraphQLError(error.message);
     }
   }
 
@@ -17,7 +30,7 @@ export default class UploadController {
       const uploads = await UploadModel.findAll();
       return uploads;
     } catch (error: any) {
-      throw new GraphQLError(error);
+      throw new GraphQLError(error.message);
     }
   }
 
@@ -26,7 +39,7 @@ export default class UploadController {
       const upload = await UploadModel.findByPk(id);
       return upload;
     } catch (error: any) {
-      throw new GraphQLError(error);
+      throw new GraphQLError(error.message);
     }
   }
 
@@ -38,7 +51,7 @@ export default class UploadController {
 
       return deletedCount > 0;
     } catch (error: any) {
-      throw new GraphQLError(error);
+      throw new GraphQLError(error.message);
     }
   }
 }
