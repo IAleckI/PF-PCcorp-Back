@@ -7,6 +7,7 @@ type User {
     email: String!
     passwordHash: String!
     verify: Boolean
+    product: [Product]
 }
 extend type query {
     getAllUser: [User]
@@ -18,4 +19,5 @@ extend type mutation {
     updateUser(id: ID!, userName: String!, email: String!, passwordHash: String!): User
     deleteUser(id: ID!): User
 }
+
 `;
