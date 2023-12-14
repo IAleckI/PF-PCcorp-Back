@@ -13,7 +13,8 @@ export interface IProducts extends Model {
   brand: string;
   price: number;
   stock: number;
-  userId?: string
+  image: string;
+  userId?: string;
   addCart: BelongsToManyAddAssociationMixin<UserModel, "users">;
   getCart: BelongsToManyGetAssociationsMixin<UserModel>;
   removeCart: BelongsToManyRemoveAssociationMixin<UserModel, "users">;
