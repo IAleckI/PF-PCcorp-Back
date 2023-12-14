@@ -24,6 +24,7 @@ const ProductSchema = gql`
             brand: String!
             stock: Int!
             price: Int!
+            image:String!
         ): Product
         updateProduct(
             userId: String
@@ -33,6 +34,7 @@ const ProductSchema = gql`
             brand: String
             stock: Int
             price: Int
+            image:String!
         ): Product
         deleteProduct(id: ID!): Product
     }

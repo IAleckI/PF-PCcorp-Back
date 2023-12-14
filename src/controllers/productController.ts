@@ -1,7 +1,9 @@
+import { Request, Response } from 'express';
 import { GraphQLError } from "graphql";
 import { IProducts } from "../types/products";
 import Products from "../models/products";
 import { v2 as cloudinary } from 'cloudinary';
+
 import dotenv from "dotenv"
 dotenv.config();
 
@@ -51,33 +53,36 @@ export default class ProductController {
     }
   }
 
-  static async createProduct(product: IProducts): Promise<IProducts> {
-    const { name, model, family, stock, price, brand, image } = product;
+  static async createProduct(req: Request, res: Response): Promise<IProducts> {
+    const {product} = req.body ;
 
     try {
-      if (!name || !model || !family || !stock || !price || !brand) {
+        if (!product.name || !product.model || !product.family || !product.stock || !product.price || !product.brand || !product.image) {
         throw new GraphQLError("All fields are required", {
           extensions: { code: "BAD_USER_INPUT" } 
         });
       }
 
-      // Upload image to Cloudinary
-      const cloudinaryResponse = await cloudinary.uploader.upload(image, {
+ 
+      const cloudinaryResponse = await cloudinary.uploader.upload(product.image, {
         folder: 'product_images',
       });
 
-      // Set Cloudinary URL in the product object
       product.image = cloudinaryResponse.secure_url;
 
       const newProduct = await Products.Create(product);
       return newProduct;
+
     } catch (error: any) {
       throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
     }
+
   }
 
-  static async updateProduct(id: string | undefined, product: IProducts): Promise<IProducts> {
+  static async updateProduct(req: Request, res: Response): Promise<IProducts> {
     try {
+        const {product} = req.body
+        const {id} = req.body
       if (!id) {
         throw new GraphQLError("Id is required", {
           extensions: { code: "BAD_USER_INPUT" } 
@@ -89,37 +94,36 @@ export default class ProductController {
         });
       }
 
-      // Check if there's a new image to upload
+   
       if (product.image) {
         // Upload new image to Cloudinary
         const cloudinaryResponse = await cloudinary.uploader.upload(product.image, {
           folder: 'product_images',
         });
 
-        // Update Cloudinary URL in the product object
         product.image = cloudinaryResponse.secure_url;
       }
 
       const updateProduct = await Products.Update(id, product);
 
       return updateProduct;
+
     } catch (error: any) {
       throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
     }
   }
-
-  static async deleteProduct(id: string): Promise<IProducts> {
+  static async deleteProduct(req: Request, res: Response): Promise<void> {
     try {
+      const { id } = req.params;
+
       if (!id) {
-        throw new GraphQLError("Id is required", {
-          extensions: { code: "BAD_USER_INPUT" } 
-        });
+        throw new GraphQLError('Id is required', { extensions: { code: 'BAD_USER_INPUT' } });
       }
 
-      // Fetch the product to get the Cloudinary image URL
+      
       const productToDelete = await Products.GetById(id);
 
-      // Delete image from Cloudinary
+    
       if (productToDelete && productToDelete.image) {
         const publicId = productToDelete.image.split('/').pop()?.split('.')[0];
         if (publicId) {
@@ -127,10 +131,12 @@ export default class ProductController {
         }
       }
 
+    
       const deletedProduct = await Products.Delete(id);
-      return deletedProduct;
+
+      res.json(deletedProduct);
     } catch (error: any) {
-      throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      res.status(500).json({ error: error.message });
     }
   }
 }

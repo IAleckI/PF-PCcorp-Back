@@ -18,6 +18,8 @@ export default class Products {
       extensions: { code: "BAD_USER_INPUT" } 
     });
 
+
+    
     const newProduct = await ProductModel.create({
       name: product.name,
       model: product.model,
@@ -25,6 +27,7 @@ export default class Products {
       stock: product.stock,
       price: product.price,
       brand: product.brand,
+      image: product.image,
     });
 
     return newProduct;
