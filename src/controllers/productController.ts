@@ -3,7 +3,8 @@ import { GraphQLError } from "graphql";
 import { IProducts } from "../types/products";
 import Products from "../models/products";
 import { v2 as cloudinary } from 'cloudinary';
-
+import { UploadedFile } from 'express-fileupload';
+import { extname } from 'path';
 import dotenv from "dotenv"
 dotenv.config();
 
@@ -53,34 +54,49 @@ export default class ProductController {
     }
   }
 
-  static async createProduct(req: Request, res: Response): Promise <IProducts | undefined> {
+  static async createProduct(req: Request, res: Response): Promise<IProducts | undefined> {
     const product = req.body as IProducts || undefined;
+    const file: UploadedFile | undefined = req.files?.file as UploadedFile | undefined;
 
     try {
-        if (!product.name || !product.model || !product.family || !product.stock || !product.price || !product.brand || !product.image) {
-        throw new GraphQLError("All fields are required", {
-          extensions: { code: "BAD_USER_INPUT" } 
-        });
-      }
+      
+        if (file) {
+          
+            const allowedExtensions = ['.jpg', '.jpeg', '.png'];
+            const fileExtension = extname(file.name).toLowerCase();
 
- 
-      const cloudinaryResponse = await cloudinary.uploader.upload(product.image, {
-        folder: 'product_images',
-      });
+            if (!allowedExtensions.includes(fileExtension)) {
+                throw new GraphQLError('Invalid file extension', {
+                    extensions: { code: 'BAD_USER_INPUT' },
+                });
+            }
 
-      product.image = cloudinaryResponse.secure_url;
+            const cloudinaryResponse = await cloudinary.uploader.upload(file.tempFilePath, {
+                folder: 'product_images',
+            });
 
-      const newProduct = await Products.Create(product);
-       
-       return newProduct;
-     
+            product.image = cloudinaryResponse.secure_url;
+        } else if (!product.image) {
+         
+            throw new GraphQLError('File or image URL is required', {
+                extensions: { code: 'BAD_USER_INPUT' },
+            });
+        }
+
+        if (!product.name || !product.model || !product.family || !product.stock || !product.price || !product.brand) {
+            throw new GraphQLError('All fields are required', {
+                extensions: { code: 'BAD_USER_INPUT' },
+            });
+        }
+
+        const newProduct = await Products.Create(product);
+
+        return newProduct;
     } catch (error: any) {
-      res.status(500).json({error : error.message})
-      // throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
-      return undefined
+        res.status(500).json({ error: error.message });
+        return undefined;
     }
-
-  }
+}
 
   static async updateProduct(req: Request, res: Response): Promise<IProducts| undefined>  {
     try {
