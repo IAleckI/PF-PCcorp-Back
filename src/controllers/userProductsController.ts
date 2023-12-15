@@ -1,11 +1,11 @@
 import UserProducts from "../models/userProducts";
-import { IUserModel } from "../types/user";
+import { IUserProductsAttributes } from "../types/userProducts";
 import { IProducts } from "../types/products";
 import { GraphQLError } from "graphql";
 
 
 export default class UserProductsController {
-  static async getAllUserProducts (userId: string | undefined): Promise<IUserModel> {
+  static async getAllUserProducts (userId: string | undefined): Promise<IUserProductsAttributes[]> {
     try {
       if (!userId) throw new GraphQLError("Missing userId", { extensions: { code: "BAD_USER_INPUT" } });
 
@@ -22,38 +22,22 @@ export default class UserProductsController {
     }
   }
 
-  static async getUserProduct (userId: string | undefined, productId: string): Promise<IUserModel> {
-    try {
-      if (!userId || !productId) throw new GraphQLError("Missing userId or productId", { extensions: { code: "BAD_USER_INPUT" } });
-      const userProduct = await UserProducts.getOne(userId, productId);
-
-      if (userProduct === null) {
-        throw new GraphQLError("User product not found", {
-          extensions: { code: "NOT_FOUND", },
-        });
-      }
-
-      return userProduct;
-    } catch (error: any) {
-      throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
-    }
-  }
 
   static async addUserProduct (userId: string | undefined, productId: string): Promise<IProducts> {
     
     try {
       if (!userId || !productId) throw new GraphQLError("Missing userId or productId", { extensions: { code: "BAD_USER_INPUT" } });
-      
+
       const userProduct = await UserProducts.addProduct(userId, productId);
 
-      if (userProduct === null) throw new GraphQLError("User or product not found", { 
+      if (userProduct === null) throw new GraphQLError("Product not found", { 
         extensions: { code: "NOT_FOUND" }
       });
 
       return userProduct;
 
     } catch (error: any) {
-      throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      throw new GraphQLError(error.message);
     }
   }
 
@@ -69,7 +53,7 @@ export default class UserProductsController {
 
       return userProductDelete;
     } catch (error: any) {
-      throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      throw new GraphQLError(error.message);
     }
   }
 }

@@ -1,19 +1,19 @@
 import ProductModel from "../model/productModel";
 import UserModel from "../model/userModel";
 import ReceiptModel from "../model/receiptModel";
-import "../model/uploadModel";
+import UserProductsModel from "../model/userProductModel";
 
 UserModel.belongsToMany(ProductModel, { 
-  through: "cart_product",
-  foreignKey: "productId",
-  otherKey: "userId",
+  through: UserProductsModel,
+  foreignKey: "userId",
+  otherKey: "productId",
   timestamps: false
 });
     
 ProductModel.belongsToMany(UserModel, {
-  through: "cart_product",
-  foreignKey: "userId",
-  otherKey: "productId",
+  through: UserProductsModel,
+  foreignKey: "productId",
+  otherKey: "userId",
   timestamps: false
 });
 
