@@ -2,17 +2,35 @@ import ProductModel from "../database/model/productModel";
 import UserModel from "../database/model/userModel";
 import sequelize from "../database/db";
 import UserProductsModel from "../database/model/userProductModel";
-import { IUserProductsAttributes } from "../types/userProducts";
 import { IProducts } from "../types/products";
 import { Transaction } from "sequelize";
 
 export default class UserProducts {
-  static async getAll (id: string): Promise<IUserProductsAttributes[]> {
+  static async getAll (id: string): Promise<IProducts[] | undefined> {
+    const user = await UserModel.findByPk(id);
+    const cart = await user?.getProducts();
+    if (!cart) throw new Error("User not found");
 
+    const result: IProducts[] = cart.map((item: IProducts) => { 
+      const product = item.dataValues;
+      const userProduct = item.dataValues.user_products.dataValues;
+      return { ...product, ...userProduct }; });
+
+    return result;
+  }
+
+  static async getPrice (id: string): Promise<number> {
     const userProducts = await UserModel.findByPk(id);
     if (userProducts === null) throw new Error("User not found");
 
-    return await UserProductsModel.findAll({ where: { userId: id } });
+    const cart = await UserProductsModel.findAll({ where: { userId: id } });
+    let total = 0;
+
+    for (const item of cart) {
+      total += item.dataValues.total;
+    }
+
+    return total;
   }
 
   static async addProduct (id: string, productId: string) {

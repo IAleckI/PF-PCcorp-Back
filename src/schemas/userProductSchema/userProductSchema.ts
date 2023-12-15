@@ -9,7 +9,8 @@ const UserProductSchema = gql`
     }
 
     extend type Query {
-        getAllUserProducts(userId: String): [Cart]
+        getAllUserProducts(userId: String): [Product]
+        getTotalPrice(userId: String): Int
     }
 
     extend type Mutation {
