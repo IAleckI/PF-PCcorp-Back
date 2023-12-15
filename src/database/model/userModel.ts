@@ -23,6 +23,7 @@ const UserModel = sequelize.define<IUserModel>("users", {
   },
   role: {
     type: DataTypes.STRING,
+    defaultValue: "user",
     allowNull: false
   },
   verify: {
