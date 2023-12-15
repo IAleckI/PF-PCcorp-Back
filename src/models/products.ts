@@ -12,13 +12,12 @@ export default class Products {
   }
 
   static async Create (product: IProducts): Promise<IProducts> {
+    
     const productFind = await ProductModel.findByPk(product.id);
 
     if (productFind) throw new GraphQLError("Product already exists", { 
       extensions: { code: "BAD_USER_INPUT" } 
     });
-
-
     
     const newProduct = await ProductModel.create({
       name: product.name,
