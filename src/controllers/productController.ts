@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response} from 'express';
 import { GraphQLError } from "graphql";
 import { IProducts } from "../types/products";
 import Products from "../models/products";
@@ -53,8 +53,8 @@ export default class ProductController {
     }
   }
 
-  static async createProduct(req: Request, res: Response): Promise<IProducts> {
-    const {product} = req.body ;
+  static async createProduct(req: Request, res: Response): Promise <IProducts | undefined> {
+    const product = req.body as IProducts || undefined;
 
     try {
         if (!product.name || !product.model || !product.family || !product.stock || !product.price || !product.brand || !product.image) {
@@ -71,15 +71,18 @@ export default class ProductController {
       product.image = cloudinaryResponse.secure_url;
 
       const newProduct = await Products.Create(product);
-      return newProduct;
-
+       
+       return newProduct;
+     
     } catch (error: any) {
-      throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      res.status(500).json({error : error.message})
+      // throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      return undefined
     }
 
   }
 
-  static async updateProduct(req: Request, res: Response): Promise<IProducts> {
+  static async updateProduct(req: Request, res: Response): Promise<IProducts| undefined>  {
     try {
         const {product} = req.body
         const {id} = req.body
@@ -105,11 +108,13 @@ export default class ProductController {
       }
 
       const updateProduct = await Products.Update(id, product);
-
+     
       return updateProduct;
 
     } catch (error: any) {
-      throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      res.status(500).json({error :error.message})
+      // throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      return undefined
     }
   }
   static async deleteProduct(req: Request, res: Response): Promise<void> {

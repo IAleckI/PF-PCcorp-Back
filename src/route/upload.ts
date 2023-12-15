@@ -1,12 +1,12 @@
 import { Router, Request, Response } from 'express';
-import UploadController from '../controllers/uploadController';
 
+import ProductController from '../controllers/productController';
 const uploadRouter = Router();
 
 uploadRouter.post('/', async (req: Request, res: Response) => {
   try {
-    const createdUpload = await UploadController.createUpload(req);
-    res.json(createdUpload);
+    const createdProduct = await ProductController.createProduct(req, res);
+    res.json(createdProduct);
   } catch (error:any) {
     res.status(500).json({ error: error.message });
   }

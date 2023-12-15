@@ -9,6 +9,7 @@ const ProductSchema = gql`
       brand: String
       price: Int
       stock: Int
+      image: String
     }
 
     extend type Query {
@@ -34,7 +35,7 @@ const ProductSchema = gql`
             brand: String
             stock: Int
             price: Int
-            image:String!
+            image:String
         ): Product
         deleteProduct(id: ID!): Product
     }
