@@ -1,9 +1,15 @@
 import { gql } from "graphql-tag";
 
 const UserProductSchema = gql`
+    type Cart {
+        userId: String
+        productId: String
+        amount: Int
+        total: Int
+    }
+
     extend type Query {
-        getAllUserProducts(userId: String): [Product]
-        getUserProduct(userId: String, id: ID!): Product
+        getAllUserProducts(userId: String): [Cart]
     }
 
     extend type Mutation {

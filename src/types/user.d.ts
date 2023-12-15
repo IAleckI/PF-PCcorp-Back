@@ -14,6 +14,6 @@ export interface IUserModel extends Model{
     role: string
     verify?: boolean
     addProduct: BelongsToManyAddAssociationMixin<ProductModel, "products">;
-    getProduct: BelongsToManyGetAssociationsMixin<ProductModel>;
+    getProducts: BelongsToManyGetAssociationsMixin<ProductModel>;
     removeProduct: BelongsToManyRemoveAssociationMixin<ProductModel, "products">;
 }
