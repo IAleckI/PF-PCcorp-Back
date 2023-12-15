@@ -1,6 +1,24 @@
+import { Request, Response} from 'express';
 import { GraphQLError } from "graphql";
 import { IProducts } from "../types/products";
 import Products from "../models/products";
+import { v2 as cloudinary } from 'cloudinary';
+
+import dotenv from "dotenv"
+dotenv.config();
+
+const {
+  CLOUD_NAME,
+  API_KEY,
+  API_SECRET,
+} = process.env;
+
+
+cloudinary.config({
+  cloud_name: CLOUD_NAME,
+  api_key: API_KEY,
+  api_secret: API_SECRET
+});
 
 export default class ProductController {
   static async getAllProducts (): Promise<IProducts[]> {
@@ -35,51 +53,95 @@ export default class ProductController {
     }
   }
 
-  static async createProduct (product: IProducts): Promise<IProducts> {
-    const { name, model, family, stock, price, brand } = product;
+  static async createProduct(req: Request, res: Response): Promise <IProducts | undefined> {
+    const product = req.body as IProducts || undefined;
 
     try {
-      if (!name || !model || !family || !stock || !price || !brand) throw new GraphQLError("All fields are required", {
-        extensions: { code: "BAD_USER_INPUT" } 
+        if (!product.name || !product.model || !product.family || !product.stock || !product.price || !product.brand || !product.image) {
+        throw new GraphQLError("All fields are required", {
+          extensions: { code: "BAD_USER_INPUT" } 
+        });
+      }
+
+ 
+      const cloudinaryResponse = await cloudinary.uploader.upload(product.image, {
+        folder: 'product_images',
       });
 
-      const newProduct = await Products.Create(product);
-      return newProduct;
+      product.image = cloudinaryResponse.secure_url;
 
+      const newProduct = await Products.Create(product);
+       
+       return newProduct;
+     
     } catch (error: any) {
-      throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      res.status(500).json({error : error.message})
+      // throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      return undefined
     }
 
   }
 
-  static async updateProduct (id: string | undefined, product: IProducts): Promise<IProducts> {
+  static async updateProduct(req: Request, res: Response): Promise<IProducts| undefined>  {
     try {
-      if (!id) throw new GraphQLError("Id is required", {
-        extensions: { code: "BAD_USER_INPUT" } 
-      });
-      if (!product) throw new GraphQLError("Product is required", {
-        extensions: { code: "BAD_USER_INPUT" } 
-      });
+        const {product} = req.body
+        const {id} = req.body
+      if (!id) {
+        throw new GraphQLError("Id is required", {
+          extensions: { code: "BAD_USER_INPUT" } 
+        });
+      }
+      if (!product) {
+        throw new GraphQLError("Product is required", {
+          extensions: { code: "BAD_USER_INPUT" } 
+        });
+      }
+
+   
+      if (product.image) {
+        // Upload new image to Cloudinary
+        const cloudinaryResponse = await cloudinary.uploader.upload(product.image, {
+          folder: 'product_images',
+        });
+
+        product.image = cloudinaryResponse.secure_url;
+      }
 
       const updateProduct = await Products.Update(id, product);
-
+     
       return updateProduct;
 
     } catch (error: any) {
-      throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      res.status(500).json({error :error.message})
+      // throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      return undefined
     }
   }
-
-  static async deleteProduct (id: string): Promise<IProducts> {
+  static async deleteProduct(req: Request, res: Response): Promise<void> {
     try {
-      if (!id) throw new GraphQLError("Id is required", {
-        extensions: { code: "BAD_USER_INPUT" } 
-      });
-      const product = await Products.Delete(id);
-      return product;
+      const { id } = req.params;
 
+      if (!id) {
+        throw new GraphQLError('Id is required', { extensions: { code: 'BAD_USER_INPUT' } });
+      }
+
+      
+      const productToDelete = await Products.GetById(id);
+
+    
+      if (productToDelete && productToDelete.image) {
+        const publicId = productToDelete.image.split('/').pop()?.split('.')[0];
+        if (publicId) {
+          await cloudinary.uploader.destroy(publicId);
+        }
+      }
+
+    
+      const deletedProduct = await Products.Delete(id);
+
+      res.json(deletedProduct);
     } catch (error: any) {
-      throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+      res.status(500).json({ error: error.message });
     }
   }
 }

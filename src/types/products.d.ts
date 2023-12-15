@@ -9,6 +9,7 @@ export interface IProducts extends Model {
   id: string;
   name: string;
   model: string;
+  image: string;
   family: string;
   brand: string;
   price: number;
