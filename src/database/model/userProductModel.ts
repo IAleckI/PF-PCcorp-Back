@@ -1,12 +1,7 @@
 import sequelize from "../db";
-import { DataTypes, Model } from "sequelize";
+import { DataTypes } from "sequelize";
+import { IUserProductsAttributes } from "../../types/userProducts";
 
-export interface IUserProductsAttributes extends Model{
-  userId: string;
-  productId: string;
-  amount: number;
-  total: number
-}
 
 const UserProductsModel = sequelize.define<IUserProductsAttributes>("user_products", {
   amount: {

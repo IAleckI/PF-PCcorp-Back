@@ -1,7 +1,8 @@
 import ProductModel from "../database/model/productModel";
 import UserModel from "../database/model/userModel";
 import sequelize from "../database/db";
-import UserProductsModel, { IUserProductsAttributes} from "../database/model/userProductModel";
+import UserProductsModel from "../database/model/userProductModel";
+import { IUserProductsAttributes } from "../types/userProducts";
 import { IProducts } from "../types/products";
 import { Transaction } from "sequelize";
 
@@ -9,12 +10,9 @@ export default class UserProducts {
   static async getAll (id: string): Promise<IUserProductsAttributes[]> {
 
     const userProducts = await UserModel.findByPk(id);
-
     if (userProducts === null) throw new Error("User not found");
 
-    const cart = await UserProductsModel.findAll({ where: { userId: id } });
-
-    return cart;
+    return await UserProductsModel.findAll({ where: { userId: id } });
   }
 
   static async addProduct (id: string, productId: string) {
