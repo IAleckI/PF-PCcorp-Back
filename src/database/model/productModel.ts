@@ -33,10 +33,6 @@ const ProductModel = sequelize.define<IProducts>("products", {
   stock: {
     type: DataTypes.INTEGER,
     allowNull: false,
-  },
-  image: {
-    type: DataTypes.STRING,
-    allowNull: false,
   }
 });
 
