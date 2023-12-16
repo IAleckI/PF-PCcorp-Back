@@ -9,11 +9,11 @@ export const ProductResolver = {
       await ProductController.getProductById(args.id),
   },
   Mutation: {
-    createProduct: async (_root: IProducts, args: IProducts) =>
-      await ProductController.createProduct(args),
-    updateProduct: async (_root: IProducts, args: IProducts) =>
+    createProduct: async (_root: any, args: IProducts) =>
+      await ProductController.createProduct(args.dataValues, args.dataValues),
+    updateProduct: async (_root: any, args: IProducts) =>
       await ProductController.updateProduct(args.id, args),
-    deleteProduct: async (_root: IProducts, args: IProducts) =>
+    deleteProduct: async (_root: any, args: IProducts) =>
       await ProductController.deleteProduct(args.id),
   }
 };
