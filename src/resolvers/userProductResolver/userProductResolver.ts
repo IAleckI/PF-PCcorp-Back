@@ -12,6 +12,8 @@ export const UserProductsResolver = {
     addUserProduct: async (_: IProducts, args: IProducts) =>
       await UserProductsController.addUserProduct(args.userId, args.id),
     deleteUserProduct: async (_: IProducts, args: IProducts) =>
-      await UserProductsController.deleteUserProduct(args.userId, args.id)
+      await UserProductsController.deleteUserProduct(args.userId, args.id),
+    deleteUserAmount: async (_: IProducts, args: IProducts) =>
+      await UserProductsController.deteleTotalProduct(args.userId, args.id),
   }
 };

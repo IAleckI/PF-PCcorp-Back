@@ -66,4 +66,21 @@ export default class UserProductsController {
       throw new GraphQLError(error.message);
     }
   }
+
+  static async deteleTotalProduct (id: string | undefined, productId: string): Promise<IProducts> {
+    try {
+      if (!id) throw new GraphQLError("Id is required", { extensions: { code: "BAD_USER_INPUT" } });
+      if (!productId) throw new GraphQLError("ProductId is required", { extensions: { code: "BAD_USER_INPUT" } });
+
+      const productDelted = await UserProducts.deleteAmount(id, productId);
+
+      if (productDelted === null) throw new GraphQLError("User or product not found", {
+        extensions: { code: "NOT_FOUND" }
+      });
+
+      return productDelted;
+    } catch (error: any) {
+      throw new GraphQLError(error.message);
+    }
+  }
 }

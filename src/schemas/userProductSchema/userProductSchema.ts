@@ -16,6 +16,7 @@ const UserProductSchema = gql`
     extend type Mutation {
         addUserProduct(userId: String!, id: ID!): Product
         deleteUserProduct(userId: String!, id: ID!): Product
+        deleteUserAmount(userId: String!, id: ID!): Product
     }
 `;
 

@@ -14,6 +14,6 @@ export const ProductResolver = {
     updateProduct: async (_root: any, args: IProducts) =>
       await ProductController.updateProduct(args.id, args),
     deleteProduct: async (_root: any, args: IProducts) =>
-      await ProductController.deleteProduct(args.id),
+      await ProductController.deleteProduct(args.id)
   }
 };

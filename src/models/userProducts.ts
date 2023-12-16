@@ -80,4 +80,21 @@ export default class UserProducts {
     return await ProductModel.findByPk(productId);
 
   }
+
+  static async deleteAmount (id: string, productId: string) {
+    await sequelize.transaction(async (t: Transaction) => {
+      const cart = await UserProductsModel.findOne({ 
+        where: { userId: id, productId: productId }, 
+        transaction: t });
+      const product = await ProductModel.findByPk(productId, { transaction: t });
+
+      if (!product || !cart) throw new Error("User or product not found");
+
+      await product.increment("stock", { by: cart.amount, transaction: t });
+      await UserProductsModel.destroy({ 
+        where: { userId: id, productId: productId }, 
+        transaction: t });
+    });
+    return await ProductModel.findByPk(productId);
+  }
 }
