@@ -13,6 +13,7 @@ export interface IUserModel extends Model{
     token?: string
     role: string
     verify?: boolean
+    ban: boolean
     addProduct: BelongsToManyAddAssociationMixin<ProductModel, "products">;
     getProducts: BelongsToManyGetAssociationsMixin<ProductModel>;
     removeProduct: BelongsToManyRemoveAssociationMixin<ProductModel, "products">;

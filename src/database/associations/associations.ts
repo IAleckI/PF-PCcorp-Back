@@ -2,6 +2,7 @@ import ProductModel from "../model/productModel";
 import UserModel from "../model/userModel";
 import ReceiptModel from "../model/receiptModel";
 import UserProductsModel from "../model/userProductModel";
+import ReviewsModel from "../model/reviewModel";
 
 UserModel.belongsToMany(ProductModel, { 
   through: UserProductsModel,
@@ -25,4 +26,14 @@ UserModel.hasMany(ReceiptModel, {
 
 ReceiptModel.belongsTo(ProductModel, {
   foreignKey: "productId"
+});
+
+UserModel.hasMany(ReviewsModel, {
+  foreignKey: "userId",
+  sourceKey: "email"
+});
+
+ReviewsModel.belongsTo(UserModel, {
+  foreignKey: "userId",
+  targetKey: "email"
 });

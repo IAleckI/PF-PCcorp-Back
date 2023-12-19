@@ -29,6 +29,10 @@ const UserModel = sequelize.define<IUserModel>("users", {
   verify: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
+  },
+  ban: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
   }
 });
 

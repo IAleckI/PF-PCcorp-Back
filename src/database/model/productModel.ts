@@ -33,6 +33,10 @@ const ProductModel = sequelize.define<IProducts>("products", {
   stock: {
     type: DataTypes.INTEGER,
     allowNull: false,
+  },
+  disabled: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
   }
 });
 

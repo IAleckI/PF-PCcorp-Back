@@ -55,6 +55,23 @@ export default class ProductController {
     }
   }
 
+  static async getAllProductReviews (productId: string) {
+    try {
+      if (!productId) throw new GraphQLError("Id is required", {
+        extensions: { code: "BAD_USER_INPUT" } 
+      });
+
+      const product = await Products.getReviews(productId);
+      if (product.length === 0) throw new GraphQLError("Product not found", {
+        extensions: { code: "NOT_FOUND" }
+      });
+
+      return product;
+    } catch (error: any) {
+      throw new GraphQLError(error.message, { extensions: { code: error.extensions.code } });
+    }
+  }
+
   static async createProduct(req: Request, res: Response): Promise<IProducts | undefined> {
     const product = req.body as IProducts || undefined;
     const file = req.files?.file as UploadedFile | undefined;

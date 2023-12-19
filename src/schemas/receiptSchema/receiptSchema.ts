@@ -1,23 +1,21 @@
-import { gql } from 'graphql-tag';
+import { gql } from "graphql-tag";
 
 const receiptSchema = gql`
     type Receipt {
-        id: ID!
+        id: ID
         userId: String
         productId: String
-        user: User
-        product: Product
+        User: User
+        Product: Product
     }
 
     extend type Query {
-        getAllReceipts: [Receipt]
-        getReceiptById(id: ID!): Receipt
+        getAllReceipts(id: String!): [Receipt]
+        getReceiptById(id: String!, productId: String!): Receipt
     }
 
     extend type Mutation {
         createReceipt(userId: String, productId: String): Receipt
-        updateReceipt(id: ID!, userId: String, productId: String): Receipt
-        deleteReceipt(id: ID!): Boolean
     }
 `;
 

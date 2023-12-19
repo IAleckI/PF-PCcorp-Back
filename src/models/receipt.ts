@@ -1,55 +1,46 @@
-import ReceiptModel from '../database/model/receiptModel';
-import { IReceipt } from '../types/receipt';
-import { GraphQLError } from 'graphql';
+import ProductModel from "../database/model/productModel";
+import ReceiptModel from "../database/model/receiptModel";
+import UserModel from "../database/model/userModel";
+import { IReceipt } from "../types/receipt";
+import { GraphQLError } from "graphql";
 
 export default class Receipt {
-  static async getAllReceipts(): Promise<IReceipt[]> {
-    try {
-      const receipts = await ReceiptModel.findAll();
-      if (receipts.length === 0) throw new Error('No receipts found');
-      return receipts;
-    } catch (error: any) {
-      throw new GraphQLError(error.message, {
-        extensions: { code: 'OPERATION_RESOLUTION_FAILURE' },
-      });
-    }
+  static async getAllReceipts(userId: string): Promise<IReceipt[]> { 
+    const receipts = await ReceiptModel.findAll({ 
+      where: { userId }});
+
+    return receipts;
   }
 
-  static async getReceiptById(id: string): Promise<IReceipt | null> {
+  static async getUser(userId: string, productId: string) {
     try {
-      const receipt = await ReceiptModel.findByPk(id);
-      return receipt;
+      const receipt = await ReceiptModel.findOne({
+        where: { userId, productId },
+      });
+      const product = await ProductModel.findByPk(productId);
+      const user = await UserModel.findByPk(userId);
+
+      if (!receipt || !product || !user) throw new GraphQLError("Receipt not found", {
+        extensions: { code: "BAD_USER_INPUT", argumentName: "id" },
+      });
+
+      return { ...receipt?.dataValues, User: user?.dataValues, Product: product?.dataValues };
     } catch (error: any) {
       throw new GraphQLError(error.message, {
-        extensions: { code: 'OPERATION_RESOLUTION_FAILURE' },
+        extensions: { code: "OPERATION_RESOLUTION_FAILURE" },
       });
     }
   }
 
   static async createReceipt(receiptData: IReceipt): Promise<IReceipt> {
     try {
-      const createdReceipt = await ReceiptModel.create(receiptData.dataValues);
+      const createdReceipt = await ReceiptModel.create({
+        userId: receiptData.userId,
+        productId: receiptData.productId,
+      });
       return createdReceipt;
     } catch (error: any) {
       throw new GraphQLError(error);
     }
   }
-
-  static async deleteReceipt(id: string): Promise<number> {
-    try {
-      const deletedCount = await ReceiptModel.destroy({
-        where: { id },
-      });
-
-      if (deletedCount === 0) throw new Error('Receipt not found');
-
-      return deletedCount;
-    } catch (error: any) {
-      throw new GraphQLError(error.message, {
-        extensions: { code: 'BAD_USER_INPUT', argumentName: 'id' },
-      });
-    }
-  }
-
-  
 }

@@ -15,6 +15,7 @@ export interface IProducts extends Model {
   price: number;
   stock: number;
   image: string;
+  disabled: boolean
   userId?: string;
   addCart: BelongsToManyAddAssociationMixin<UserModel, "users">;
   getCart: BelongsToManyGetAssociationsMixin<UserModel>;
