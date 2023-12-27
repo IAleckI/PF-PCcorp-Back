@@ -36,6 +36,7 @@ export default class Products {
       stock: product.stock,
       price: product.price,
       brand: product.brand,
+      type: product.type,
       image: product.image,
     });
 

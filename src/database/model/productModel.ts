@@ -13,7 +13,7 @@ const ProductModel = sequelize.define<IProducts>("products", {
     allowNull: false,
   },
   model: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(50),
     allowNull: false,
   },
   image:{
@@ -21,10 +21,10 @@ const ProductModel = sequelize.define<IProducts>("products", {
     allowNull:false,
   },
   family: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(30),
   },
   brand: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(20),
   },
   price: {
     type: DataTypes.INTEGER,
@@ -37,6 +37,10 @@ const ProductModel = sequelize.define<IProducts>("products", {
   disabled: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
+  },
+  type: {
+    type: DataTypes.STRING(20),
+    allowNull: false,
   }
 });
 
