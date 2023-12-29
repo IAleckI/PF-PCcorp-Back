@@ -11,8 +11,7 @@ const PORT = process.env.PORT || 4000;
 
 async function Server (typeDefs: DocumentNode[], resolvers: any) {
   const corsOptions = {
-    origin: 'http://localhost:5173/',
-    credentials: true,
+    origin: 'http://localhost:5173'
   };
   const apolloServer = new ApolloServer({ typeDefs, resolvers });
   const server = express();
