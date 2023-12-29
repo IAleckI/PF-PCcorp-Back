@@ -10,6 +10,10 @@ import morgan from "morgan";
 const PORT = process.env.PORT || 4000;
 
 async function Server (typeDefs: DocumentNode[], resolvers: any) {
+  const corsOptions = {
+    origin: 'http://localhost:5173/',
+    credentials: true,
+  };
   const apolloServer = new ApolloServer({ typeDefs, resolvers });
   const server = express();
   
@@ -20,13 +24,13 @@ async function Server (typeDefs: DocumentNode[], resolvers: any) {
       useTempFiles: true,
       tempFileDir: "./uploads"
     }),
-    cors(),
+    cors(corsOptions),
     morgan("dev"),
     uploadRouter
   );
 
   server.use("/graphql",
-    cors(),
+    cors(corsOptions),
     express.json(),
     expressMiddleware(apolloServer)
   );
