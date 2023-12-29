@@ -13,6 +13,7 @@ const ProductSchema = gql`
       amount: Int
       total: Int
       userId: String
+      type: String
     }
 
     extend type Query {
