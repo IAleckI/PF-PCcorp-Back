@@ -7,8 +7,8 @@ export const ProductResolver = {
       await ProductController.getAllProducts(),
     getProductById: async (_root: IProducts, args: IProducts) =>
       await ProductController.getProductById(args.id),
-    getAllProductReviews: async (_root: IProducts, args: IProducts) =>
-      await ProductController.getAllProductReviews(args.id)
+    getAllProductReviews: async () =>
+      await ProductController.getAllProductReviews()
   },
   Mutation: {
     createProduct: async (_root: any, args: IProducts) =>

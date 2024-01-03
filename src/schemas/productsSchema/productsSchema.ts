@@ -14,12 +14,13 @@ const ProductSchema = gql`
       total: Int
       userId: String
       type: String
+      reviews: [Review]
     }
 
     extend type Query {
         getAllProducts: [Product]
         getProductById(id: ID!): Product
-        getAllProductReviews(id: ID!): [Review]
+        getAllProductReviews: [Product]
     }
 
     extend type Mutation {

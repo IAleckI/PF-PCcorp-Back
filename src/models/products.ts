@@ -2,7 +2,6 @@ import { GraphQLError } from "graphql";
 import ProductModel from "../database/model/productModel";
 import { IProducts } from "../types/products";
 import ReviewsModel from "../database/model/reviewModel";
-import { IReviews } from "../types/reviews";
 
 export default class Products {
   static async GetAll (): Promise<IProducts[]> {
@@ -13,12 +12,11 @@ export default class Products {
     return await ProductModel.findByPk(id);
   }
 
-  static async getReviews (id: string): Promise<IReviews[]> {
-    return await ReviewsModel.findAll({
-      where: {
-        productId: id,
-      }
-    });
+  static async getReviews (): Promise<IProducts[]> {
+    return await ProductModel.findAll({ include: [{
+      model: ReviewsModel,
+      required: true,
+    }]});
   }
 
   static async Create (product: IProducts): Promise<IProducts> {

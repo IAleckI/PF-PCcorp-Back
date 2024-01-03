@@ -37,3 +37,15 @@ ReviewsModel.belongsTo(UserModel, {
   foreignKey: "userId",
   targetKey: "email"
 });
+
+// 1-n ProductModel - ReviewsModel
+
+ProductModel.hasMany(ReviewsModel, {
+  foreignKey: "productId",
+  sourceKey: "id"
+});
+
+ReviewsModel.belongsTo(ProductModel, {
+  foreignKey: "productId",
+  targetKey: "id"
+});
