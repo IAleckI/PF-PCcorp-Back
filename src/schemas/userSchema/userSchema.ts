@@ -7,6 +7,7 @@ type User {
     email: String!
     passwordHash: String!
     verify: Boolean
+    token: String
     product: [Product]
 }
 extend type Query {

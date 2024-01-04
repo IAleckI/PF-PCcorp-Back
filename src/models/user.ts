@@ -76,24 +76,27 @@ export default class User {
   }
 
   static async login(email:string,password:string):Promise<IUserModel>{
-    const user =await UserModel.findOne({
+    const user = await UserModel.findOne({
       where: {
         email,
         verify: true
       }
     });
-    if(!user){
-      throw new GraphQLError("User not found", {
-        extensions: { code: "BAD_USER_INPUT" }
-      });
-    }
-    const validPassword = await bcrypt.compare(password, user.passwordHash);
-    if(!validPassword){
-      throw new GraphQLError("Invalid password", {
-        extensions: { code: "BAD_USER_INPUT" }
-      });
-    }
-    return user;
+
+    if (!user) throw new Error("Invalid user or password");
+    
+    const passwordCorrect = user === null
+      ? false
+      : await bcrypt.compare(password, user.dataValues.passwordHash);
+
+    if (!passwordCorrect) throw new Error("Invalid user or password");
+    const userToken = {
+      name: user?.dataValues.userName,
+      email: user?.dataValues.email
+    };
+
+    const token = Jwt.sign(userToken, process.env.SECRET as string);
+    return { ...user?.dataValues, token };
   }
 
   static async verify (token: string): Promise<IUserModel> {
