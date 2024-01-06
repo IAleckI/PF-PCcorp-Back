@@ -29,6 +29,6 @@ export default class Payment {
 
     const result = await preference.create({ body });
 
-    return result.id;
+    return result.init_point;
   }
 }
