@@ -4,6 +4,7 @@ import ProductSchema from "./productsSchema/productsSchema";
 import UserSchema from "./userSchema/userSchema";
 import receiptSchema from "./receiptSchema/receiptSchema";
 import ReviewSchema from "./reviewSchema/reviewSchema";
+import favSchema from "./favSchema/favSchema";
 
 const TypeDefs = gql`
 
@@ -17,4 +18,4 @@ const TypeDefs = gql`
 `;
 
 export const RootDefs = [
-  TypeDefs, ProductSchema, UserProductSchema, UserSchema, receiptSchema, ReviewSchema];
+  TypeDefs, ProductSchema, UserProductSchema, UserSchema, receiptSchema, ReviewSchema, favSchema];

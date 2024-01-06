@@ -1,5 +1,6 @@
 import { Model } from "sequelize";
 import UserModel from "../database/model/userModel";
+import FavModel from "../database/model/favsModel";
 import { 
   BelongsToManyAddAssociationMixin, 
   BelongsToManyGetAssociationsMixin, 

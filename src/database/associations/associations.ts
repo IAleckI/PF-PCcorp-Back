@@ -3,6 +3,9 @@ import UserModel from "../model/userModel";
 import ReceiptModel from "../model/receiptModel";
 import UserProductsModel from "../model/userProductModel";
 import ReviewsModel from "../model/reviewModel";
+import FavModel from "../model/favsModel";
+
+// n-n UserModel - ProductModel
 
 UserModel.belongsToMany(ProductModel, { 
   through: UserProductsModel,
@@ -17,6 +20,31 @@ ProductModel.belongsToMany(UserModel, {
   otherKey: "userId",
   timestamps: false
 });
+
+// n-n UserModel - ProductModel - product
+
+
+UserModel.hasMany(FavModel, {
+  foreignKey: "userId",
+  sourceKey: "email"
+});
+
+FavModel.belongsTo(UserModel, {
+  foreignKey: "userId",
+  targetKey: "email"
+});
+
+
+ProductModel.hasMany(FavModel, {
+  foreignKey: "productId",
+  sourceKey: "id"
+});
+
+FavModel.belongsTo(ProductModel, {
+  foreignKey: "productId",
+  targetKey: "id"
+});
+
 
 // 1-n UserModel - ReceiptModel
 
