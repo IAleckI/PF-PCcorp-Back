@@ -4,6 +4,7 @@ import userResolver from "./userResolver/userResolver";
 import receiptResolver from "./receiptResolver/receiptResolver";
 import reviewsResolver from "./reviewsResolver/reviewsResolver";
 import favResolver from "./favResolver/favResolver";
+import paymentResolver from "./paymentResolver/paymentResolver";
 
 const Resolvers = {
   Query: {
@@ -15,4 +16,7 @@ const Resolvers = {
 };
 
 export const RootResolver = [
-  Resolvers, ProductResolver, UserProductsResolver, userResolver, receiptResolver, reviewsResolver, favResolver];
+  Resolvers, ProductResolver, UserProductsResolver, 
+  userResolver, receiptResolver, reviewsResolver, 
+  favResolver, paymentResolver
+];
