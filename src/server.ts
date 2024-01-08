@@ -35,7 +35,7 @@ async function Server (typeDefs: DocumentNode[], resolvers: any) {
     expressMiddleware(apolloServer)
   );
 
-  server.listen(PORT, () => console.log(`Server ready at http://localhost:${PORT}/graphql`));
+  server.listen(PORT, () => console.log(`Server ready at: http://localhost:${PORT}/graphql`));
 }
 
 export default Server;
