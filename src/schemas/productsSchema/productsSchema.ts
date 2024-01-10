@@ -31,7 +31,7 @@ const ProductSchema = gql`
             brand: String!
             stock: Int!
             price: Int!
-            image:String!
+            image:Upload!
         ): Product
         updateProduct(
             id: ID!

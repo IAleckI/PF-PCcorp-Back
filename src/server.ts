@@ -19,7 +19,12 @@ async function Server (typeDefs: DocumentNode[], resolvers: any) {
   
   await apolloServer.start();
 
-  server.use("/files",
+  server.use("/graphql",
+    cors(corsOptions),
+    express.json(),
+    expressMiddleware(apolloServer)
+  );
+ server.use("/files",
     fileUpload({
       useTempFiles: true,
       tempFileDir: "./uploads"
@@ -29,11 +34,7 @@ async function Server (typeDefs: DocumentNode[], resolvers: any) {
     uploadRouter
   );
 
-  server.use("/graphql",
-    cors(corsOptions),
-    express.json(),
-    expressMiddleware(apolloServer)
-  );
+ 
 
   server.listen(PORT, () => console.log(`Server ready at: http://localhost:${PORT}/graphql`));
 }
