@@ -99,6 +99,29 @@ export default class User {
     return { ...user?.dataValues, token };
   }
 
+  static async networkLogin (userName: string, email: string) {
+    const userFind = await UserModel.findOne({ where: { email: email } });
+    const pwd = crypto.randomUUID();
+    const userToken = {
+      userName,
+      email
+    };
+
+    const token = Jwt.sign(userToken, process.env.SECRET as string, { expiresIn: 604800 });
+
+    if (userFind === null) {
+      await UserModel.create({
+        userName,
+        email,
+        passwordHash: pwd,
+        verify: true
+      });
+    }
+
+    return token;
+
+  }
+
   static async verify (token: string): Promise<IUserModel> {
     const user = Jwt.verify(token, process.env.SECRET as string) as IUserModel;
     

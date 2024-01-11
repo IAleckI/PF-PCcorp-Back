@@ -99,6 +99,21 @@ export default class UserController {
     }
   }
 
+  static async userNetworkLogin (email: string, userNmae: string): Promise<string>{
+    try {
+      if (!email || !userNmae) throw new GraphQLError("User data is incomplete", {
+        extensions: { code: "BAD_USER_INPUT" }
+      });
+
+      const user = await User.networkLogin(userNmae, email);
+      return user;
+    } catch (error: any) {
+      throw new GraphQLError(error.message);
+    }
+
+  }
+
+
   static async verifyUser(token:string):Promise<IUserModel>{
     try {
       if (token === undefined) throw new GraphQLError("User id is undefined", {

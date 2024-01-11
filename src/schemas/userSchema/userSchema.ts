@@ -14,6 +14,7 @@ extend type Query {
     getAllUser: [User]
     getUserById(id: ID!): User
     getUserLogin(email: String!, passwordHash: String!): User
+    getUserNetworkLogin(email: String!, userName: String!): String
 }
 extend type Mutation {
     createUser(userName: String!, email: String!, passwordHash: String!): User

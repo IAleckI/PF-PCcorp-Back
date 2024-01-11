@@ -7,7 +7,9 @@ const userResolver = {
     getUserById: async (_root: any, args: { id: string }): Promise<IUserModel | null> => 
       await UserController.getUserById(args.id),
     getUserLogin: async (_root: any, args: IUserModel) =>
-      await UserController.login(args.email, args.passwordHash)
+      await UserController.login(args.email, args.passwordHash),
+    getUserNetworkLogin: async (_root: IUserModel, args: IUserModel) =>
+      await UserController.userNetworkLogin(args.email, args.userName)
   },
   Mutation: {
     createUser: async (_root: any, args: IUserModel): Promise<IUserModel> => 
