@@ -13,15 +13,15 @@ export default class Payment {
       };
     });
 
-    const client = new MercadoPagoConfig({ accessToken: "TEST-7360406428690838-010519-a57b06426632c3925b5fb48622d79153-1624069767",
+    const client = new MercadoPagoConfig({ accessToken: "TEST-8168380568696245-010522-93b30f7a6a080347c56e45b11beec21f-1139630350",
       options: { timeout: 5000 } });
 
     const body = {
       items: itemMapped,
       back_urls: {
-        success: "https://www.google.com/",
-        failure: "https://www.google.com/",
-        pending: "https://www.google.com/"
+        success: "https://p-final-p-ccorp-front.vercel.app/",
+        failure: "https://p-final-p-ccorp-front.vercel.app/",
+        pending: "https://p-final-p-ccorp-front.vercel.app/"
       },
       auto_return: "approved"
     };
