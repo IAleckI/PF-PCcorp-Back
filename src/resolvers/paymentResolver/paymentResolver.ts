@@ -4,7 +4,7 @@ import { IPayment } from "../../types/payment";
 const paymentResolver = {
   Query: {
     createPayment: async (_: IPayment, args: IPayment) => 
-      await PaymentController.createPayment(args.items)
+      await PaymentController.createPayment(args.id, args.items)
   }
 };
 
