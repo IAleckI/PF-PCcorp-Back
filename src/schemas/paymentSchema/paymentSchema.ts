@@ -9,7 +9,7 @@ const paymentSchema = gql`
     }
 
     extend type Query {
-        createPayment(items: [Payment]): String
+        createPayment(id: String, items: [Payment]): String
     }
 `;
 
