@@ -34,7 +34,7 @@ async function Server (typeDefs: DocumentNode[], resolvers: any) {
     morgan("dev"),
     uploadRouter
   );
-  server.use("/payment",
+  server.use("/",
     cors(corsOptions),
     morgan("dev"),
     paymentRoute

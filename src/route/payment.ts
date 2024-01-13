@@ -3,9 +3,9 @@ import { Request, Response } from "express";
 
 const paymentRoute = Router();
 
-paymentRoute.get("/", (req: Request, res: Response) => {
+paymentRoute.get("/payment", (req: Request, res: Response) => {
   console.log(req.body);
-  res.sendStatus(200);
+  res.status(200).send("ok");
 });
 
 export default paymentRoute;
