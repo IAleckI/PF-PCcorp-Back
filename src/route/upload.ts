@@ -12,9 +12,5 @@ uploadRouter.post("/", async (req: Request, res: Response) => {
   }
 });
 
-uploadRouter.post("/webhook", (req: Request, res: Response) => {
-  console.log(req.body);
-  res.sendStatus(201);
-});
 
 export default uploadRouter;

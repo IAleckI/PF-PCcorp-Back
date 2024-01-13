@@ -6,6 +6,7 @@ import fileUpload from "express-fileupload";
 import uploadRouter from "./route/upload";
 import cors from "cors";
 import morgan from "morgan";
+import paymentRoute from "./route/payment";
 
 const PORT = process.env.PORT || 4000;
 
@@ -33,7 +34,11 @@ async function Server (typeDefs: DocumentNode[], resolvers: any) {
     morgan("dev"),
     uploadRouter
   );
-
+  server.use("/payment",
+    cors(corsOptions),
+    morgan("dev"),
+    paymentRoute
+  );
  
 
   server.listen(PORT, () => console.log(`Server ready at: http://localhost:${PORT}/graphql`));
