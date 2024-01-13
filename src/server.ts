@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 4000;
 
 async function Server (typeDefs: DocumentNode[], resolvers: any) {
   const corsOptions = {
-    origin: ['https://p-final-p-ccorp-front.vercel.app', 'http://localhost:5173'],
+    origin: ["https://p-final-p-ccorp-front.vercel.app", "https://api.mercadopago.com" ,"http://localhost:5173"],
     
   };
   const apolloServer = new ApolloServer({ typeDefs, resolvers });
@@ -24,7 +24,7 @@ async function Server (typeDefs: DocumentNode[], resolvers: any) {
     express.json(),
     expressMiddleware(apolloServer)
   );
- server.use("/files",
+  server.use("/files",
     fileUpload({
       useTempFiles: true,
       tempFileDir: "./uploads"
