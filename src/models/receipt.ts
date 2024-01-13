@@ -32,15 +32,9 @@ export default class Receipt {
     }
   }
 
-  static async createReceipt(receiptData: IReceipt): Promise<IReceipt> {
-    try {
-      const createdReceipt = await ReceiptModel.create({
-        userId: receiptData.userId,
-        productId: receiptData.productId,
-      });
-      return createdReceipt;
-    } catch (error: any) {
-      throw new GraphQLError(error);
-    }
+  static async createReceipt(id: string, userId: string): Promise<IReceipt> {
+
+    return await ReceiptModel.create({ id, userId });
+    
   }
 }

@@ -50,11 +50,15 @@ FavModel.belongsTo(ProductModel, {
 
 UserModel.hasMany(ReceiptModel, {
   foreignKey: "userId",
+  sourceKey: "email"
 });
 
-ReceiptModel.belongsTo(ProductModel, {
-  foreignKey: "productId"
+ReceiptModel.belongsTo(UserModel, {
+  foreignKey: "userId",
+  targetKey: "email"
 });
+
+// 1-n UserModel - ReviewsModel
 
 UserModel.hasMany(ReviewsModel, {
   foreignKey: "userId",

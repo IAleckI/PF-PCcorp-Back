@@ -1,8 +1,11 @@
 import { MercadoPagoConfig, Preference } from "mercadopago";
 import { IPayment } from "../types/payment";
+import ReceiptController from "../controllers/receiptController";
+import crypto from "crypto";
 
 export default class Payment {
-  static async payment (items: IPayment[]) {
+  static async payment (userId: string, items: IPayment[]) {
+    const uuid = crypto.randomUUID();
     const itemMapped = items.map((e) => {
       return {
         id: e.id,
@@ -23,8 +26,11 @@ export default class Payment {
         failure: "https://p-final-p-ccorp-front.vercel.app/",
         pending: "https://p-final-p-ccorp-front.vercel.app/"
       },
-      auto_return: "approved"
+      auto_return: "approved",
+      external_reference: uuid,
     };
+
+    await ReceiptController.createReceipt(uuid, userId);
     const preference = new Preference(client);
 
     const result = await preference.create({ body });

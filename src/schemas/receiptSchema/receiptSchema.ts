@@ -4,7 +4,6 @@ const receiptSchema = gql`
     type Receipt {
         id: ID
         userId: String
-        productId: String
         User: User
         Product: Product
     }
