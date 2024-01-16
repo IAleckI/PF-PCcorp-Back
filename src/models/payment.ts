@@ -1,10 +1,13 @@
 import { MercadoPagoConfig, Preference } from "mercadopago";
 import { IPayment } from "../types/payment";
 import ReceiptController from "../controllers/receiptController";
+import { sendPayment } from "../services/payment/mail.services";
+import UserModel from "../database/model/userModel";
 import crypto from "crypto";
 
 export default class Payment {
   static async payment (userId: string, items: IPayment[]) {
+    const user = await UserModel.findByPk(userId);
     const uuid = crypto.randomUUID();
     const itemMapped = items.map((e) => {
       return {
@@ -15,6 +18,12 @@ export default class Payment {
         currency_id: "ARS",
       };
     });
+
+    let total = 0;
+
+    for (const item of items) {
+      total += item.price;
+    }
 
     const client = new MercadoPagoConfig({ accessToken: "TEST-7360406428690838-010519-a57b06426632c3925b5fb48622d79153-1624069767",
       options: { timeout: 5000 } });
@@ -33,7 +42,11 @@ export default class Payment {
     await ReceiptController.createReceipt(uuid, userId);
     const preference = new Preference(client);
 
+    await sendPayment(userId, user?.dataValues.userName, uuid, total);
+
     const result = await preference.create({ body });
+
+
 
     return result.init_point;
   }
