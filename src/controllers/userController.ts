@@ -64,12 +64,12 @@ export default class UserController {
     }
   }
 
-  static async updateUser(id:string, user:IUserModel):Promise<IUserModel>{
+  static async updateUser(email:string, user:IUserModel):Promise<IUserModel>{
     try {
-      if (id === undefined) throw new GraphQLError("User id is undefined", {
+      if (email === undefined) throw new GraphQLError("User id is undefined", {
         extensions: { code: "BAD_USER_INPUT", argumentName: "id" }
       });
-      const userUpdated = await User.update(id, user);
+      const userUpdated = await User.update(email, user);
       if (userUpdated === null) throw new GraphQLError("User not found", {
         extensions: { code: "BAD_USER_INPUT" }
       });

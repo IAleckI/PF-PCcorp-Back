@@ -49,10 +49,10 @@ export default class User {
         
   }
 
-  static async update(id: string, user: IUserModel): Promise<IUserModel> {
+  static async update(email:string, user: IUserModel): Promise<IUserModel> {
     const userUpdated = await UserModel.findOne({
       where: {
-        email: id,
+        email: email,
         verify: true
       }
     });
