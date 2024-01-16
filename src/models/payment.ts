@@ -7,11 +7,7 @@ import UserModel from "../database/model/userModel";
 import crypto from "crypto";
 
 export default class Payment {
-  static async payment (userId: string, items: IPayment[]) {
-    const user = await UserModel.findByPk(userId);
-    if (!user) throw new Error("User not found");
-    await UserProductsModel.destroy({ where: { userId } });
-    const uuid = crypto.randomUUID();
+  static async payment (items: IPayment[]) {
     const itemMapped = items.map((e) => {
       return {
         id: e.id,
@@ -21,12 +17,6 @@ export default class Payment {
         currency_id: "ARS",
       };
     });
-
-    let total = 0;
-
-    for (const item of items) {
-      total += item.price;
-    }
 
     const client = new MercadoPagoConfig({ accessToken: "TEST-7360406428690838-010519-a57b06426632c3925b5fb48622d79153-1624069767",
       options: { timeout: 5000 } });
@@ -39,18 +29,24 @@ export default class Payment {
         pending: "https://p-final-p-ccorp-front.vercel.app/"
       },
       auto_return: "approved",
-      external_reference: uuid,
     };
 
-    await ReceiptController.createReceipt(uuid, userId);
+    
     const preference = new Preference(client);
-
-    await sendPayment(userId, user?.dataValues.userName, uuid, total);
 
     const result = await preference.create({ body });
 
-
-
     return result.init_point;
+  }
+
+  static async getPayment (userId: string, total: number) {
+    const user = await UserModel.findByPk(userId);
+    if (!user) throw new Error("User not found");
+    await UserProductsModel.destroy({ where: { userId } });
+    const uuid = crypto.randomUUID();
+    
+    await sendPayment(userId, user?.dataValues.userName, uuid, total);
+    const receipt = await ReceiptController.createReceipt(uuid, userId);
+    return receipt;
   }
 }
