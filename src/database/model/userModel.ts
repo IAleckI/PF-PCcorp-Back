@@ -2,13 +2,10 @@ import sequelize from "../db";
 import { DataTypes } from "sequelize";
 import { IUserModel } from "../../types/user";
 
-
 const UserModel = sequelize.define<IUserModel>("users", {
-  id: {
-    type: DataTypes.STRING,
-    primaryKey: true,
-    allowNull: false,
-    defaultValue: () => DataTypes.UUIDV4
+  id: { 
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4
   },
   userName: {
     type: DataTypes.STRING,
