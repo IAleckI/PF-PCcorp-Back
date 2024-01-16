@@ -18,7 +18,7 @@ extend type Query {
 }
 extend type Mutation {
     createUser(userName: String!, email: String!, passwordHash: String!): User
-    updateUser(id: ID!, userName: String, email: String, passwordHash: String): User
+    updateUser(id: ID!, user: updatedUser!): User
     deleteUser(id: ID!): User
     userVeryfy(token: String!): User
 }
