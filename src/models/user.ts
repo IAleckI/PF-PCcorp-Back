@@ -92,7 +92,8 @@ export default class User {
     if (!passwordCorrect) throw new Error("Invalid user or password");
     const userToken = {
       name: user?.dataValues.userName,
-      email: user?.dataValues.email
+      email: user?.dataValues.email,
+      role: user?.dataValues.role,
     };
 
     const token = Jwt.sign(userToken, process.env.SECRET as string);
@@ -104,7 +105,8 @@ export default class User {
     const pwd = crypto.randomUUID();
     const userToken = {
       userName,
-      email
+      email,
+      role: userFind?.dataValues.role,
     };
 
     const token = Jwt.sign(userToken, process.env.SECRET as string, { expiresIn: 604800 });
