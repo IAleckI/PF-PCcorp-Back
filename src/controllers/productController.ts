@@ -55,9 +55,9 @@ export default class ProductController {
     }
   }
 
-  static async getAllProductReviews () {
+  static async getAllProductReviews (productid: string) {
     try {
-      const product = await Products.getReviews();
+      const product = await Products.getReviews(productid);
       
       if (product.length === 0) throw new GraphQLError("Product not found", {
         extensions: { code: "NOT_FOUND" }

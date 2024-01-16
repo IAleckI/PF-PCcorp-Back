@@ -20,7 +20,7 @@ const ProductSchema = gql`
     extend type Query {
         getAllProducts: [Product]
         getProductById(id: ID!): Product
-        getAllProductReviews: [Product]
+        getAllProductReviews(productId: String): [Review]
     }
 
     extend type Mutation {

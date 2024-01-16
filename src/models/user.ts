@@ -1,6 +1,6 @@
 import { IUserModel} from "../types/user";
 import UserModel from "../database/model/userModel";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import Jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import sendVerifyMail from "../services/mail/mail.services";

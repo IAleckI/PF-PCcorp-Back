@@ -1,5 +1,6 @@
 import ProductController from "../../controllers/productController";
 import { IProducts } from "../../types/products";
+import { IReviews } from "../../types/reviews";
 
 export const ProductResolver = {
   Query: {
@@ -7,8 +8,8 @@ export const ProductResolver = {
       await ProductController.getAllProducts(),
     getProductById: async (_root: IProducts, args: IProducts) =>
       await ProductController.getProductById(args.id),
-    getAllProductReviews: async () =>
-      await ProductController.getAllProductReviews()
+    getAllProductReviews: async (_root: IReviews, args: IReviews) =>
+      await ProductController.getAllProductReviews(args.productId)
   },
   Mutation: {
     createProduct: async (_root: any, args: IProducts) =>
