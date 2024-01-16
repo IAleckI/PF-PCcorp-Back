@@ -2,12 +2,15 @@ import { MercadoPagoConfig, Preference } from "mercadopago";
 import { IPayment } from "../types/payment";
 import ReceiptController from "../controllers/receiptController";
 import { sendPayment } from "../services/payment/mail.services";
+import UserProductsModel from "../database/model/userProductModel";
 import UserModel from "../database/model/userModel";
 import crypto from "crypto";
 
 export default class Payment {
   static async payment (userId: string, items: IPayment[]) {
     const user = await UserModel.findByPk(userId);
+    if (!user) throw new Error("User not found");
+    await UserProductsModel.destroy({ where: { userId } });
     const uuid = crypto.randomUUID();
     const itemMapped = items.map((e) => {
       return {

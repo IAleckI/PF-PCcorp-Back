@@ -18,7 +18,7 @@ export async function sendPayment(adress: string, name: string, paymentId: strin
   await transporter.sendMail({
     from: "PCorp",
     to: adress,
-    subject: "Verify your email",
+    subject: "Compra confirmada",
     html: paymentTemplate(name, paymentId, price)
   });
 }
