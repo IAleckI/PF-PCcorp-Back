@@ -19,7 +19,9 @@ const userResolver = {
     deleteUser: async (_root: any, args: { id: string }): Promise<IUserModel> =>
       await UserController.deleteUser(args.id),
     userVeryfy: async (_root: any, args: { token: string }): Promise<IUserModel> =>
-      await UserController.verifyUser(args.token)
+      await UserController.verifyUser(args.token),
+    setUserBan: async (_root: any, args: { id: string }): Promise<IUserModel> =>
+      await UserController.setUserBan(args.id),
   }
 };
 

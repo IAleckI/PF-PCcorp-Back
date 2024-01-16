@@ -129,5 +129,13 @@ export default class UserController {
     }
   }
 
-    
+  static async setUserBan (userid: string) {
+    try {
+      const user = await User.banUser(userid);
+      return user;
+    } catch (error:any) {
+      throw new GraphQLError(error.message);
+    } 
+  
+  }
 }

@@ -79,7 +79,8 @@ export default class User {
     const user = await UserModel.findOne({
       where: {
         email,
-        verify: true
+        verify: true,
+        ban: false
       }
     });
 
@@ -101,7 +102,7 @@ export default class User {
   }
 
   static async networkLogin (userName: string, email: string) {
-    const userFind = await UserModel.findOne({ where: { email: email } });
+    const userFind = await UserModel.findOne({ where: { email: email, ban: false } });
     const pwd = crypto.randomUUID();
     const userToken = {
       userName,
@@ -136,5 +137,14 @@ export default class User {
     await userFind?.save();
         
     return userFind;
+  }
+
+  static async banUser (userId: string) {
+    const user = await UserModel.findByPk(userId);
+    if (user === null) throw new Error("User not found");
+    user?.set({ ban: true });
+    await user?.save();
+
+    return user;
   }
 }
