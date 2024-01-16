@@ -4,9 +4,10 @@ import { DataTypes } from "sequelize";
 
 const ProductModel = sequelize.define<IProducts>("products", {
   id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+    type: DataTypes.STRING,
     primaryKey: true,
+    allowNull: false,
+    defaultValue: () => DataTypes.UUIDV4
   },
   name: {
     type: DataTypes.STRING,
