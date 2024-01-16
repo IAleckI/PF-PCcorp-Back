@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { mailTemplate } from "./template";
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
+export const transporter = nodemailer.createTransport({
   service: "gmail",
   host: process.env.HOST,
   port: 465,
