@@ -49,26 +49,23 @@ export default class User {
         
   }
 
-  static async update(email:string, user: IUserModel): Promise<IUserModel> {
-   
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(user.passwordHash, salt);
-    const userUpdated = await UserModel.findOne({
+  static async update(email: string, user: IUserModel): Promise<IUserModel> {
+    const existingUser = await UserModel.findOne({
       where: {
         email: email,
         verify: true,
-        passwordHash: passwordHash,
-      }
-    });
-    
-    if(userUpdated===null){
+      },
+    });  
+    if (!existingUser) {
       throw new GraphQLError("User not found", {
-        extensions: { code: "BAD_USER_INPUT" }
+        extensions: { code: "BAD_USER_INPUT" },
       });
-    }
-    userUpdated?.set(user);
-    await userUpdated.save();
-    return userUpdated;
+    }    
+    existingUser.set({     
+      passwordHash: await bcrypt.hash(user.passwordHash, await bcrypt.genSalt(10)),
+    });   
+    await existingUser.save();  
+    return existingUser;
   }
 
   static async delete (id:string): Promise<IUserModel|null>{
