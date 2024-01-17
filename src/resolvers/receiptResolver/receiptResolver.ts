@@ -10,7 +10,7 @@ const receiptResolver = {
   },
   Mutation: {
     createReceipt: async (_: IReceipt, args: IReceipt) => 
-      await ReceiptController.createReceipt(args.id, args.userId),
+      await ReceiptController.createReceipt(args.id, args.userId, args.productId),
   }
 };
 

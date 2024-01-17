@@ -45,10 +45,10 @@ export default class ReceiptController {
     }
   }
 
-  static async createReceipt(id: string, userId: string): Promise<IReceipt> {
+  static async createReceipt(id: string, userId: string, productId: string): Promise<IReceipt> {
     try {
       if (!id || !userId) throw new Error("Id or user id is undefined");
-      return await Receipt.createReceipt(id, userId);
+      return await Receipt.createReceipt(id, userId, productId);
     } catch (error: any) {
       throw new GraphQLError(error.message);
     }

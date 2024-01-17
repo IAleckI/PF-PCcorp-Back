@@ -32,9 +32,9 @@ export default class Receipt {
     }
   }
 
-  static async createReceipt(id: string, userId: string): Promise<IReceipt> {
+  static async createReceipt(id: string, userId: string, productId: string): Promise<IReceipt> {
 
-    return await ReceiptModel.create({ id, userId });
+    return await ReceiptModel.create({ id, userId, productId });
     
   }
 }

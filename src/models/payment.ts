@@ -4,6 +4,7 @@ import ReceiptController from "../controllers/receiptController";
 import { sendPayment } from "../services/payment/mail.services";
 import UserProductsModel from "../database/model/userProductModel";
 import UserModel from "../database/model/userModel";
+import UserProducts from "./userProducts";
 import crypto from "crypto";
 
 export default class Payment {
@@ -41,12 +42,15 @@ export default class Payment {
 
   static async getPayment (userId: string, total: number) {
     const user = await UserModel.findByPk(userId);
-    if (!user) throw new Error("User not found");
-    await UserProductsModel.destroy({ where: { userId } });
     const uuid = crypto.randomUUID();
+    if (!user) throw new Error("User not found");
+    const userProduct = await UserProducts.getAll(userId);
+    userProduct?.map(async p => {
+      const receiptId = crypto.randomUUID();
+      await ReceiptController.createReceipt(receiptId, userId, p.id);
+    });
+    await UserProductsModel.destroy({ where: { userId } });
     
     await sendPayment(userId, user?.dataValues.userName, uuid, total);
-    const receipt = await ReceiptController.createReceipt(uuid, userId);
-    return receipt;
   }
 }

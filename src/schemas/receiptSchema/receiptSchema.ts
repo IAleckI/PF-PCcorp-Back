@@ -14,7 +14,7 @@ const receiptSchema = gql`
     }
 
     extend type Mutation {
-        createReceipt(userId: String, productId: String): Receipt
+        createReceipt(id: ID, userId: String, productId: ID): Receipt
     }
 `;
 

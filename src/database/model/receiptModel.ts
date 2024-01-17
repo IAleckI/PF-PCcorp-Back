@@ -10,6 +10,10 @@ const ReceiptModel = sequelize.define<IReceipt>("receipt", {
   userId: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  productId: {
+    type: DataTypes.UUID,
+    allowNull: false,
   }
 });
 

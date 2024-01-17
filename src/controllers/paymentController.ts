@@ -21,10 +21,7 @@ export default class PaymentController {
       if (!userId) throw new GraphQLError("User id is required");
       if (!total) throw new GraphQLError("Total is required");
 
-      const result = await Payment.getPayment(userId, total);
-
-      return result; 
-      
+      await Payment.getPayment(userId, total);
     
     } catch (error: any) {
       throw new GraphQLError(error.message);
