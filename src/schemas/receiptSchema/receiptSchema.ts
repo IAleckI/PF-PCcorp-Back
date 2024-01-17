@@ -9,7 +9,7 @@ const receiptSchema = gql`
     }
 
     extend type Query {
-        getAllReceipts(id: String!): [Receipt]
+        getAllReceipts(id: String!): [Product]
         getReceiptById(id: String!, productId: String!): Receipt
     }
 

@@ -2,14 +2,20 @@ import ProductModel from "../database/model/productModel";
 import ReceiptModel from "../database/model/receiptModel";
 import UserModel from "../database/model/userModel";
 import { IReceipt } from "../types/receipt";
+import { IProducts } from "../types/products";
 import { GraphQLError } from "graphql";
 
 export default class Receipt {
-  static async getAllReceipts(userId: string): Promise<IReceipt[]> { 
+  static async getAllReceipts(userId: string): Promise<IProducts[]> { 
     const receipts = await ReceiptModel.findAll({ 
       where: { userId }});
+    const userProducts: IProducts[] = await Promise.all(
+      receipts.map(async (receipt) => {
+        const product = await ProductModel.findByPk(receipt.dataValues.productId);
+        return { ...product?.dataValues };
+      }));
 
-    return receipts;
+    return userProducts;
   }
 
   static async getUser(userId: string, productId: string) {

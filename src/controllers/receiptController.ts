@@ -1,9 +1,10 @@
 import Receipt from "../models/receipt";
 import { IReceipt } from "../types/receipt";
+import { IProducts } from "../types/products";
 import { GraphQLError } from "graphql";
 
 export default class ReceiptController {
-  static async getAllReceipts(userId: string | undefined): Promise<IReceipt[]> {
+  static async getAllReceipts(userId: string | undefined): Promise<IProducts[]> {
     try {
       if (!userId) {
         throw new GraphQLError("UserId is required", {
