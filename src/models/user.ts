@@ -50,12 +50,17 @@ export default class User {
   }
 
   static async update(email:string, user: IUserModel): Promise<IUserModel> {
+   
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(user.passwordHash, salt);
     const userUpdated = await UserModel.findOne({
       where: {
         email: email,
-        verify: true
+        verify: true,
+        passwordHash: passwordHash,
       }
     });
+    
     if(userUpdated===null){
       throw new GraphQLError("User not found", {
         extensions: { code: "BAD_USER_INPUT" }
