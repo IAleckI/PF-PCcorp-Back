@@ -142,7 +142,7 @@ export default class User {
   static async banUser (userId: string) {
     const user = await UserModel.findByPk(userId);
     if (user === null) throw new Error("User not found");
-    user?.set({ ban: true });
+    user?.set({ ban: user.dataValues.ban === false ? true : false });
     await user?.save();
 
     return user;
