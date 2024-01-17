@@ -5,18 +5,26 @@ import { GraphQLError } from "graphql";
 export default class ReceiptController {
   static async getAllReceipts(userId: string | undefined): Promise<IReceipt[]> {
     try {
-      if (!userId) throw new GraphQLError("UserId is required", {
-        extensions: { code: "BAD_USER_INPUT", argumentName: "userId" },
-      });
-
+      if (!userId) {
+        throw new GraphQLError("UserId is required", {
+          extensions: { code: "BAD_USER_INPUT", argumentName: "userId" },
+        });
+      }
+  
       const receipts = await Receipt.getAllReceipts(userId);
-
-      if (receipts.length === 0) throw new Error("No receipts found");
-      
+  
+      if (receipts.length === 0) {
+        throw new GraphQLError("No receipts found", {
+          extensions: { code: "NOT_FOUND" },
+        });
+      }
+  
       return receipts;
     } catch (error: any) {
+      const errorCode = error.extensions ? error.extensions.code : "INTERNAL_SERVER_ERROR";
+      
       throw new GraphQLError(error.message, {
-        extensions: { code: error.extensions.code },
+        extensions: { code: errorCode },
       });
     }
   }
