@@ -110,6 +110,7 @@ export default class User {
       name: user?.dataValues.userName,
       email: user?.dataValues.email,
       role: user?.dataValues.role,
+      ban: user?.dataValues.ban
     };
 
     const token = Jwt.sign(userToken, process.env.SECRET as string);
@@ -123,6 +124,7 @@ export default class User {
       userName,
       email,
       role: userFind?.dataValues.role,
+      ban: userFind?.dataValues.ban
     };
 
     const token = Jwt.sign(userToken, process.env.SECRET as string, { expiresIn: 604800 });
