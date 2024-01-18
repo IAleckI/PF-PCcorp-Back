@@ -23,7 +23,7 @@ extend type Mutation {
     updateUser(userName: String, email: String, passwordHash: String): User
     deleteUser(id: ID!): User
     userVeryfy(token: String!): User
-    setUserBan(id: ID!): User
+    setUserBan(userId: String!): User
 }
 
 `;
