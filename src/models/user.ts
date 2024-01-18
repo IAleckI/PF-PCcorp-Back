@@ -95,7 +95,7 @@ export default class User {
       where: {
         email,
         verify: true,
-        // ban: false
+        ban: false
       }
     });
 
