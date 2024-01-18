@@ -95,7 +95,7 @@ export default class User {
       where: {
         email,
         verify: true,
-        ban: false
+        // ban: false
       }
     });
 
@@ -118,7 +118,7 @@ export default class User {
   }
 
   static async networkLogin (userName: string, email: string) {
-    const userFind = await UserModel.findOne({ where: { email: email, ban: false } });
+    const userFind = await UserModel.findOne({ where: { email: email} });
     const pwd = crypto.randomUUID();
     const userToken = {
       userName,
