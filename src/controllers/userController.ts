@@ -129,9 +129,9 @@ export default class UserController {
     }
   }
 
-  static async setUserBan (userid: string) {
+  static async setUserBan (id: string) {
     try {
-      const user = await User.banUser(userid);
+      const user = await User.banUser(id);
       return user;
     } catch (error:any) {
       throw new GraphQLError(error.message);

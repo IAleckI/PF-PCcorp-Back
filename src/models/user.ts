@@ -156,8 +156,8 @@ export default class User {
     return userFind;
   }
 
-  static async banUser (userId: string) {
-    const user = await UserModel.findByPk(userId);
+  static async banUser (id: string) {
+    const user = await UserModel.findByPk(id);
     if (user === null) throw new Error("User not found");
     user?.set({ ban: user.dataValues.ban === false ? true : false });
     await user?.save();
